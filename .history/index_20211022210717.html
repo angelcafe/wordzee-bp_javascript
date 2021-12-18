@@ -1,0 +1,27 @@
+const http = require('http');
+const fs = require('fs');
+
+const hostname = '127.0.0.1';
+const port = 3000;
+
+const leerfichero = require('./leerfichero.js');
+
+const servidor = function(req, res) {
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  fs.readFile('spanish.txt', 'utf8' , (err, data) => {
+    if (err) {
+      console.error(err)
+      return
+    }
+    //console.log(data)
+    datos = JSON.stringify(data);
+    res.write(datos);
+    res.end();
+  });
+}
+
+const server = http.createServer(servidor);
+
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
+});

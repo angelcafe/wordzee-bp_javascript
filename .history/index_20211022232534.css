@@ -1,0 +1,71 @@
+.herramientas {
+    display: none;
+    max-width: 26em;
+    min-width: 26em;
+}
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+    supported by Chrome and Opera */
+}
+.palenc {
+    cursor: pointer;
+}
+.principal {
+    max-width: 24em;
+    min-width: 24em;
+}
+.rosa {
+    background-color: pink;
+}
+#idPuntosExtra input {
+    width: 13%;
+}
+#idBorrarPalabra,
+#idBotonBuscaPalabras {
+    cursor: pointer;
+}
+#menu {
+    position: absolute;
+    display: none;
+    padding: 0px;
+    font-family: sans-serif;
+    font-size: 15px;
+    background: #fff;
+    color: #555;
+    border: 1px solid #C6C6C6;
+    -webkit-transition: opacity .5s ease-in-out;
+    -moz-transition: opacity .5s ease-in-out;
+    transition: opacity .5s ease-in-out;
+    -webkit-box-shadow: 2px 2px 2px 0px rgba(143, 144, 145, 1);
+    -moz-box-shadow: 2px 2px 2px 0px rgba(143, 144, 145, 1);
+    box-shadow: 2px 2px 2px 0px rgba(143, 144, 145, 1);
+}
+#menu div {
+    display: block;
+    color: #555;
+    text-decoration: none;
+    padding: 6px 8px 6px 8px;
+    width: 294px;
+    position: relative;
+}
+#menu div img,
+#menu div i.fa {
+    height: 20px;
+    font-size: 17px;
+    width: 20px;
+    position: absolute;
+    left: 5px;
+    top: 2px;
+}
+#menu span:hover {
+    color: #fff;
+    background: #69a0f1;
+}
+#menu span {
+    font-weight: bold;
+}

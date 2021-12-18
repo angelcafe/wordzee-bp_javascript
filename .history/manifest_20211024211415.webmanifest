@@ -1,0 +1,23 @@
+{
+    "name": "Busca Palabras para Wordzee!",
+    "short_name": "BuscaPalabras",
+    "description": "Buscador de palabras para el juego WordZee!",
+    "start_url": "https://angelcastro.es/bpj/index.html",
+    "lang": "Spanish",
+    "display": "standalone",
+    "theme_color": "#3d3d3d",
+    "background_color": "#f2f2f2",
+    "orientation": "any",
+    "serviceworker": {
+        "src": "serviceworker.js",
+        "scope": "/bpj/",
+        "update_via_cache": "none"
+      },
+    "icons": [
+        {
+            "src": "wordzee.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        }
+    ]
+}

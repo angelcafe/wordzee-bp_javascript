@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Last-Modified" content="0">
+    <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <link rel="icon" href="favicon.ico" type="image/ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="index.css">
+    <title>Busca palabras</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!-- Cabecera -->
+        <nav class="nav d-flex justify-content-between bg-info">
+            <li class="nav-item">
+                <span class="nav-link text-white">Buscador de palabras para Wordzee! <small>v0.2</small></span>
+            </li>
+            <li class="nav-item">
+                <div class="nav-link text-white form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="idActivarHerramientas">
+                    <label class="form-check-label" for="idActivarHerramientas">Activar herramientas</label>
+                </div>
+            </li>
+            <li class="nav-item">
+                <span class="nav-link">
+                    <a href="https://www.facebook.com/BuscaPalabras-para-Wordzee-106324508497974" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" height="20"></a>
+                    <a href="https://t.me/buscadorwordzee" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/2048px-Telegram_2019_Logo.svg.png" height="20"></a>
+                </span>
+            </li>
+        </nav>
+        <div class="row">
+            <!-- Puntos extra -->
+            <div id="idPuntosExtra" class="col border shadow rounded m-3 p-3">
+                <form name="principal" id="principal" method="POST">
+                    <h4>Puntos extra</h4>
+                    <div class="p-0 mb-1">
+                        <input type="text" name="pal3let1" id="pal3let1" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal3let2" id="pal3let2" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal3let3" id="pal3let3" class="btn btn-info" value="" readonly>
+                    </div>
+                    <div class="p-0 mb-1">
+                        <input type="text" name="pal4let1" id="pal4let1" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal4let2" id="pal4let2" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal4let3" id="pal4let3" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal4let4" id="pal4let4" class="btn btn-info" value="" readonly>
+                    </div>
+                    <div class="p-0 mb-1">
+                        <input type="text" name="pal5let1" id="pal5let1" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal5let2" id="pal5let2" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal5let3" id="pal5let3" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal5let4" id="pal5let4" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal5let5" id="pal5let5" class="btn btn-info" value="" readonly>
+                    </div>
+                    <div class="p-0 mb-1">
+                        <input type="text" name="pal6let1" id="pal6let1" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal6let2" id="pal6let2" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal6let3" id="pal6let3" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal6let4" id="pal6let4" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal6let5" id="pal6let5" class="btn btn-info" value="" readonly>
+                        <input type="text" name="pal6let6" id="pal6let6" class="btn btn-info" value="" readonly>
+                    </div>
+                    <div class="p-0 mb-3">
+                        <input type="text" name="pal7let1" id="pal7let1" class=" btn-info" value="" readonly>
+                        <input type="text" name="pal7let2" id="pal7let2" class=" btn-info" value="" readonly>
+                        <input type="text" name="pal7let3" id="pal7let3" class=" btn-info" value="" readonly>
+                        <input type="text" name="pal7let4" id="pal7let4" class=" btn-info" value="" readonly>
+                        <input type="text" name="pal7let5" id="pal7let5" class=" btn-info" value="" readonly>
+                        <input type="text" name="pal7let6" id="pal7let6" class=" btn-info" value="" readonly>
+                        <input type="text" name="pal7let7" id="pal7let7" class=" btn-info" value="" readonly>
+                    </div>
+                    <h4>Letras disponibles</h4>
+                    <div class="input-group input-group-sm mb-3" id="letras">
+                        <input type="text" name="letra1" id="idLetra1" size="1" maxlength="1" autocomplete="off" required="required" class="form-control text-uppercase" value="">
+                        <input type="text" name="letra2" id="idLetra2" size="1" maxlength="1" autocomplete="off" required="required" class="form-control text-uppercase" value="">
+                        <input type="text" name="letra3" id="idLetra3" size="1" maxlength="1" autocomplete="off" required="required" class="form-control text-uppercase" value="">
+                        <input type="text" name="letra4" id="idLetra4" size="1" maxlength="1" autocomplete="off" required="required" class="form-control text-uppercase" value="">
+                        <input type="text" name="letra5" id="idLetra5" size="1" maxlength="1" autocomplete="off" required="required" class="form-control text-uppercase" value="">
+                        <input type="text" name="letra6" id="idLetra6" size="1" maxlength="1" autocomplete="off" required="required" class="form-control text-uppercase" value="">
+                        <input type="text" name="letra7" id="idLetra7" size="1" maxlength="1" autocomplete="off" required="required" class="form-control text-uppercase" value="">
+                    </div>
+                    <h4>Ronda</h4>
+                    <div class="custom-control custom-radio custom-control-inline mb-3">
+                        <input type="radio" id="idRonda1" name="ronda" value="1" class="custom-control-input" checked>
+                        <label class="custom-control-label" for="idRonda1">1</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline mb-3">
+                        <input type="radio" id="idRonda2" name="ronda" value="2" class="custom-control-input">
+                        <label class="custom-control-label" for="idRonda2">2</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline mb-3">
+                        <input type="radio" id="idRonda3" name="ronda" value="3" class="custom-control-input">
+                        <label class="custom-control-label" for="idRonda3">3</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline mb-3">
+                        <input type="radio" id="idRonda4" name="ronda" value="4" class="custom-control-input">
+                        <label class="custom-control-label" for="idRonda4">4</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline mb-3">
+                        <input type="radio" id="idRonda5" name="ronda" value="5" class="custom-control-input">
+                        <label class="custom-control-label" for="idRonda5">5</label>
+                    </div>
+                    <div class="btn-toolbar justify-content-between mt-1">
+                        <button type="submit" class="btn btn-primary">Buscar</button>
+                        <button type="button" onclick="restablecer()" class="btn btn-warning">Restablecer</button>
+                    </div>
+                </form>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        1. Pulsa en los cuadros de "Puntos extra" para indicar las casillas con DL y TP.
+                        <br>
+                        2. Introduce las "Letras disponibles" que te da Wordzee.
+                        <br>
+                        3. Indica la "Ronda" en la que estás para obtener los puntos correctos.
+                        <br>
+                        4. Pulsa en Buscar y elige la palabra que más te convenga.
+                    </div>
+                </div>
+            </div>
+            <!-- Herramientas -->
+            <div id="idHerramientas" class="herramientas d-none border col m-3 p-3 shadow rounded">
+                <h4>Herramientas</h4>
+                <form class="row">
+                    <div class="col">Palabra nueva:</div>
+                    <div class="col">
+                        <input name="palabraGuardar" id="palabraGuardar" type="text" minlength="3" maxlength="7" autocomplete="off" required="required" class="form-control text-uppercase" value="">
+                    </div>
+                    <div class="col">
+                        <button id="idGuardar" type="button" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+                <form class="row mt-3">
+                    <div class="col">Borrar palabra:</div>
+                    <div class="col">
+                        <input name="palabraBorrar" id="palabraBorrar" type="text" minlength="3" maxlength="7" autocomplete="off" required="required" class="form-control text-uppercase" value="">
+                    </div>
+                    <div class="col">
+                        <button id="idBorrar" type="button" class="btn btn-danger">Borrar</button>
+                    </div>
+                </form>
+                <form class="row mt-3">
+                    <div class="col">Exportar JSON:</div>
+                    <div class="col"></div>
+                    <div class="col">
+                        <button type="button" onclick="palabras.exportar()" class="btn btn-primary">Exportar</button>
+                    </div>
+                </form>
+                <form class="row mt-3">
+                    <div class="col">Importar JSON:</div>
+                    <div class="col custom-file">
+                        <input type="file" class="custom-file-input" accept=".json" id="formFile" required="required">
+                        <label class="custom-file-label" for="formFile" data-browse="Elegir"></label>
+                    </div>
+                    <div class="col input-group-append">
+                        <button type="button" class="btn btn-warning" onclick="palabras.importar()">Importar</button>
+                    </div>
+                </form>
+            </div>
+            <div class="border col m-3 p-3 shadow rounded">
+                <!-- Palabras sugeridas -->
+                <h4>Palabras sugeridas</h4>
+                <table class="table table-sm table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>3 letras</th>
+                            <th>4 letras</th>
+                            <th>5 letras</th>
+                            <th>6 letras</th>
+                            <th>7 letras</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="noselect"></td>
+                            <td class="noselect"></td>
+                            <td class="noselect"></td>
+                            <td class="noselect"></td>
+                            <td class="noselect"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Palabras encontradas -->
+                <h4>Palabras encontradas</h4>
+                <table class="table table-sm table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>3 letras</th>
+                            <th>4 letras</th>
+                            <th>5 letras</th>
+                            <th>6 letras</th>
+                            <th>7 letras</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="menu palenc noselect"></td>
+                            <td class="menu palenc noselect"></td>
+                            <td class="menu palenc noselect"></td>
+                            <td class="menu palenc noselect"></td>
+                            <td class="menu palenc noselect"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="modalAlert" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Importación finalizada.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="menu">
+        <div>
+            <i class="bi bi-eraser-fill"></i> Borrar <span id="idBorrarPalabra"></span> de la Base de Datos
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>
