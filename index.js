@@ -9,20 +9,10 @@ puntos = { A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, L: 1, M: 
 (function () {
     'use strict'
 
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
     ajax('cargar=todo');
     inicio();
 })()
-
-function activarHerramientas(e) {
-    const h = document.getElementsByClassName('herramientas')[0];
-    if (e.currentTarget.checked) {
-        h.style.display = 'block';
-        localStorage.setItem('ActivarHerramientas', 'block');
-    } else {
-        h.style.display = 'none';
-        localStorage.setItem('ActivarHerramientas', 'none');
-    }
-}
 
 function ajax(enviar = null, alerta = false) {
     let reqHeader = new Headers();
@@ -30,7 +20,7 @@ function ajax(enviar = null, alerta = false) {
     let initObject = {
         method: 'POST', headers: reqHeader, body: enviar, cache: 'no-cache',
     };
-    var userRequest = new Request('back/buscapalabras.php', initObject);
+    var userRequest = new Request('https://angelcastro.es/wordzee/back/buscapalabras.php', initObject);
     fetch(userRequest)
         .then(response => {
             if (response.status == 200) {
@@ -100,13 +90,6 @@ function inicio() {
 
     document.querySelectorAll('#idPuntosExtra input').forEach(element => element.addEventListener("click", cambiarValorBotones));
 
-    if (localStorage.getItem('ActivarHerramientas')) {
-        document.getElementsByClassName('herramientas')[0].style.display = localStorage.getItem('ActivarHerramientas');
-        document.getElementById('idActivarHerramientas').checked = (localStorage.getItem('ActivarHerramientas').indexOf('none') < 0) ? (true) : (false);
-    }
-
-    document.getElementById('idActivarHerramientas').addEventListener("change", activarHerramientas);
-
     Array.from(document.getElementsByClassName("palenc")).forEach(element => {
         element.addEventListener("click", function (e) {
             let palabra = e.target.innerText.split(' ')[0];
@@ -134,30 +117,6 @@ function inicio() {
             e.currentTarget.select();
         });
     });
-    document.getElementById('idBorrar').addEventListener('click', function () {
-        palabras.borrar(document.getElementById('palabraBorrar').value);
-    });
-    document.getElementById('idGuardar').addEventListener("click", function () {
-        ajax("guardar=" + document.getElementById('palabraGuardar').value);
-    });
-    document.onclick = function () {
-        document.getElementById('menu').style.display = 'none';
-    }
-    document.oncontextmenu = function (e) {
-        document.getElementById('menu').style.display = 'none';
-        if (e.target.className.includes("menu")) {
-            e.preventDefault();
-            let menu = document.getElementById('menu');
-            menu.style.left = e.pageX - 100 + 'px';
-            menu.style.top = e.pageY + 'px';
-            menu.style.display = 'block';
-            let borrarPalabra = document.getElementById('idBorrarPalabra');
-            borrarPalabra.innerText = e.target.innerText.split(' ')[0];
-            borrarPalabra.addEventListener('click', function (e) {
-                palabras.borrar(e.innerText);
-            });
-        }
-    }
 }
 
 function fLetrasDisponibles(form) {
