@@ -14,7 +14,7 @@ puntos = { A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, L: 1, M: 
     inicio();
 })()
 
-function ajax(enviar = null, alerta = false) {
+function ajax(enviar = null) {
     let reqHeader = new Headers();
     reqHeader.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
     let initObject = {
@@ -30,13 +30,7 @@ function ajax(enviar = null, alerta = false) {
             }
         })
         .then(function (data) {
-            if (alerta) {
-                alerta(alerta);
-            } else if (enviar.indexOf('borrar') !== -1 || enviar.indexOf('guardar') !== -1) {
-                document.getElementById('principal').submit();
-            } else if (enviar.indexOf('cargar') !== -1) {
-                palabrasCargadas(data);
-            }
+            palabrasCargadas(data);
         })
         .catch(function (err) {
             console.log(err);
@@ -57,6 +51,7 @@ function buscarPalabras() {
         fLetrasDisponibles(form);
         fRonda(form);
         fPalabrasEncontradas();
+        document.querySelectorAll("td.palenc").forEach(e => e.addEventListener("click", copiarEncontradaDisponibles));
     } else {
         alerta('Hay que rellenar todas las Letras disponibles', 'danger');
     }
@@ -67,55 +62,38 @@ function cambiarValorBotones(e) {
     switch (element.value) {
         case '':
             element.value = 'DL';
-            element.className = 'btn rosa';
+            element.className = 'btn btn-secondary rosa';
             break;
         case 'DL':
             element.value = 'TL';
-            element.className = 'btn btn-success';
+            element.className = 'btn btn-secondary bg-success';
             break;
         case 'TL':
             element.value = '';
-            element.className = 'btn btn-info';
+            element.className = 'btn btn-secondary info';
             break;
         default:
             break;
     }
 }
 
+function copiarEncontradaDisponibles(e) {
+    let palabra = e.target.innerText.split(' ')[0];
+    if (palabra.length > 0) {
+        document.querySelectorAll('#letras input').forEach((e, i) => e.value = palabra[i] || '');
+        document.getElementById('letras').scrollIntoView();
+    }
+}
+
 function inicio() {
     document.getElementsByName("pal6let6")[0].value = "DP";
-    document.getElementsByName("pal6let6")[0].className = 'btn btn-primary';
+    document.getElementsByName("pal6let6")[0].className = 'btn btn-secondary bg-primary';
     document.getElementsByName("pal7let7")[0].value = "TP";
-    document.getElementsByName("pal7let7")[0].className = 'btn btn-danger';
-
+    document.getElementsByName("pal7let7")[0].className = 'btn btn-secondary bg-danger';
     document.querySelectorAll('#idPuntosExtra input').forEach(element => element.addEventListener("click", cambiarValorBotones));
-
-    Array.from(document.getElementsByClassName("palenc")).forEach(element => {
-        element.addEventListener("click", function (e) {
-            let palabra = e.target.innerText.split(' ')[0];
-            if (palabra.length > 0) {
-                for (let x = 0; x < 7; x++) {
-                    document.getElementsByName('letra' + (x + 1))[0].value = palabra[x];
-                }
-            }
-        });
-    });
-
-    var texto = /^[a-jl-vx-zA-JL-VX-ZñÑ]$/;
     document.querySelectorAll("#letras > input").forEach(element => {
-        element.addEventListener("keyup", e => {
-            if (texto.test(element.value) === true) {
-                if (e.currentTarget.nextElementSibling) {
-                    e.currentTarget.nextElementSibling.focus();
-                    e.currentTarget.nextElementSibling.select();
-                }
-            } else {
-                e.currentTarget.value = '';
-            }
-        });
-        element.addEventListener("click", e => {
-            e.currentTarget.select();
-        });
+        element.addEventListener("keyup", e => fLetrasInput(e, element));
+        element.addEventListener("click", e => e.currentTarget.select());
     });
 }
 
@@ -124,6 +102,18 @@ function fLetrasDisponibles(form) {
     for (let x = 0; x < 7; x++) {
         letrasDisponibles[x] = form[contador].value.toUpperCase();
         contador++;
+    }
+}
+
+function fLetrasInput(e, element) {
+    var texto = /^[a-jl-vx-zA-JL-VX-ZñÑ]$/;
+    if (texto.test(element.value) === true) {
+        if (e.currentTarget.nextElementSibling) {
+            e.currentTarget.nextElementSibling.focus();
+            e.currentTarget.nextElementSibling.select();
+        }
+    } else {
+        e.currentTarget.value = '';
     }
 }
 
@@ -184,7 +174,7 @@ function fPalabrasEncontradas() {
         for (let x = 3; x < 8; x++) {
             let td = document.createElement("td");
             if (palabrasEncontradas[x][y]) {
-                td.className = 'menu palenc noselect';
+                td.className = 'palenc noselect';
                 let txt = document.createTextNode(palabrasEncontradas[x][y] + ' - ' + puntosEncontrados[x][y]);
                 td.appendChild(txt);
             }

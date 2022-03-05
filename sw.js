@@ -1,5 +1,5 @@
-var cacheName = 'bpwordzee';
-var filesToCache = [
+const cacheName = 'bpwordzee';
+const filesToCache = [
     './',
     './index.html',
     './css/bootstrap.min.css',
@@ -8,10 +8,12 @@ var filesToCache = [
     './icons/telegram.png',
     './icons/wordzee-256_256.webp',
     './icons/wordzee-32_32.png',
+    './icons/wordzee-512_512.png',
     './icons/wordzee-64_64.jpg',
     './js/bootstrap.bundle.min.js',
     './js/index.min.js'
 ];
+const version = '0.3.0';
 /* Start the service worker and cache all of the app's content */
 self.addEventListener('install', function (e) {
     e.waitUntil(
