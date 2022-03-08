@@ -1,3 +1,8 @@
+@media (prefers-color-scheme: dark) {
+    body { background: black; color: #bbb; }
+    table { color: #bbb !important; }
+    .form-control, .form-control:focus { background-color: #333; color: #AAA; }
+}
 div#idPuntosExtra input.btn-secondary {
     min-width: 2rem;
     padding: 1.5% 0%;
