@@ -9,16 +9,17 @@ puntos = { A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, L: 1, M: 
 (function () {
     'use strict'
 
+    if (!window.localStorage) window.alert("Su navegador es incompatilbe con esta aplicación. Utilice un navegador éstandar.");
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
-    ajax('cargar=todo');
+    cargarPalabras();
     inicio();
 })()
 
-function ajax(enviar = null) {
+function ajax() {
     let reqHeader = new Headers();
     reqHeader.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
     let initObject = {
-        method: 'POST', headers: reqHeader, body: enviar, cache: 'no-cache',
+        method: 'POST', headers: reqHeader, body: 'cargar=todo', cache: 'no-cache',
     };
     var userRequest = new Request('https://angelcastro.es/wordzee/back/buscapalabras.php', initObject);
     fetch(userRequest)
@@ -30,7 +31,8 @@ function ajax(enviar = null) {
             }
         })
         .then(function (data) {
-            palabrasCargadas(data);
+            cargarPalabras(JSON.stringify(data));
+
         })
         .catch(function (err) {
             console.log(err);
@@ -77,6 +79,20 @@ function cambiarValorBotones(e) {
     }
 }
 
+function cargarPalabras(datos = null) {
+    if (datos) {
+        localStorage.removeItem('palabras');
+        localStorage.setItem('palabras', datos);
+    } else {
+        const palabras = localStorage.getItem('palabras');
+        if (palabras) {
+            palabrasCargadas(JSON.parse(palabras));
+        } else {
+            ajax();
+        }
+    }
+}
+
 function copiarEncontradaDisponibles(e) {
     let palabra = e.target.innerText.split(' ')[0];
     if (palabra.length > 0) {
@@ -118,8 +134,8 @@ function fLetrasInput(e, element) {
 }
 
 function palabrasCargadas(dat) {
-    dat.forEach(function (palabra) {
-        vPalabras.push({ nombre: palabra, longitud: palabra.length });
+    vPalabras = dat.map(function (palabra) {
+        return { nombre: palabra, longitud: palabra.length };
     });
 }
 
