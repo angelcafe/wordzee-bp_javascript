@@ -1,2 +1,3 @@
 # wordzee-bp_javascript
-Falta por añadir comentarios.
+
+Versión PWA/JavaScript del buscador de palabras para Wordzee
