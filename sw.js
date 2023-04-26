@@ -3,7 +3,7 @@ const filesToCache = [
     './',
     './index.html',
     './css/bootstrap.min.css',
-    './css/index.min.css',
+    './css/index.css',
     './icons/facebook.png',
     './icons/telegram.png',
     './icons/wordzee-256_256.webp',
@@ -11,7 +11,7 @@ const filesToCache = [
     './icons/wordzee-512_512.png',
     './icons/wordzee-64_64.jpg',
     './js/bootstrap.bundle.min.js',
-    './js/index.min.js'
+    './js/index.js'
 ];
 const version = '0.3.2';
 /* Start the service worker and cache all of the app's content */

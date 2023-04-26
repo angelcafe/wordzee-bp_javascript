@@ -7,24 +7,26 @@ var puntos = new Array();
 puntos = { A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, L: 1, M: 3, N: 1, Ñ: 8, O: 1, P: 3, Q: 5, R: 1, S: 1, T: 1, U: 1, V: 4, X: 8, Y: 4, Z: 10 };
 
 (function () {
-    'use strict'
+    'use strict';
 
-    if (!window.localStorage) window.alert("Su navegador es incompatilbe con esta aplicación. Utilice un navegador éstandar.");
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
+    if (!window.localStorage)
+        window.alert("Su navegador es incompatilbe con esta aplicación. Utilice un navegador éstandar.");
+    if ('serviceWorker' in navigator)
+        navigator.serviceWorker.register('./sw.js');
     cargarPalabras();
     inicio();
-})()
+})();
 
 function ajax() {
     let reqHeader = new Headers();
     reqHeader.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
     let initObject = {
-        method: 'POST', headers: reqHeader, body: 'cargar=todo', cache: 'no-cache',
+        method: 'POST', headers: reqHeader, body: 'cargar=todo', cache: 'no-cache'
     };
-    var userRequest = new Request('https://angelcastro.es/wordzee/back/buscapalabras.php', initObject);
+    var userRequest = new Request('https://angelcastro.com.es/wordzee/back/buscapalabras.php', initObject);
     fetch(userRequest)
         .then(response => {
-            if (response.status == 200) {
+            if (response.status === 200) {
                 return response.json();
             } else {
                 throw "Respuesta incorrecta del servidor";
@@ -32,7 +34,6 @@ function ajax() {
         })
         .then(function (data) {
             cargarPalabras(JSON.stringify(data));
-
         })
         .catch(function (err) {
             console.log(err);
@@ -54,8 +55,14 @@ function buscarPalabras() {
         fRonda(form);
         fPalabrasEncontradas();
         document.querySelectorAll("td.palenc").forEach(e => e.addEventListener("click", copiarEncontradaDisponibles));
+        if (document.querySelector('.alert')) {
+            const alert = bootstrap.Alert.getOrCreateInstance('#liveAlertPlaceholder');
+            alert.close();
+        }
     } else {
-        alerta('Hay que rellenar todas las Letras disponibles', 'danger');
+        if (!document.querySelector('.alert')) {
+            alerta('Hay que rellenar todas las Letras disponibles', 'danger');
+        }
     }
 }
 
@@ -84,13 +91,13 @@ function cargarPalabras(datos = null) {
         localStorage.removeItem('palabras');
         localStorage.setItem('palabras', datos);
     } else {
-        const palabras = localStorage.getItem('palabras');
-        if (palabras) {
-            palabrasCargadas(JSON.parse(palabras));
-        } else {
+        datos = localStorage.getItem('palabras');
+        if (!datos) {
             ajax();
+            return;
         }
     }
+    palabrasCargadas(JSON.parse(datos));
 }
 
 function copiarEncontradaDisponibles(e) {
@@ -140,19 +147,20 @@ function palabrasCargadas(dat) {
 }
 
 function fPalabrasEncontradas() {
+    const cadenaLetrasDisponibles = letrasDisponibles.join('');
     let palabrasEncontradas = new Array();
     let puntosEncontrados = new Array();
     let vPalabrasEncontradas = vPalabras.filter(function (obj) {
         let letrasPalabra = obj.nombre.split('');
         let total = 0;
         for (let y = 0; y < letrasPalabra.length; y++) {
-            if (letrasDisponibles.indexOf(letrasPalabra[y]) === -1 || (obj.nombre.split(letrasPalabra[y]).length - 1 > letrasDisponibles.join('').split(letrasPalabra[y]).length - 1)) {
+            if (letrasDisponibles.includes(letrasPalabra[y]) === false || (obj.nombre.split(letrasPalabra[y]).length > cadenaLetrasDisponibles.split(letrasPalabra[y]).length)) {
                 return false;
             }
             let valor = puntos[letrasPalabra[y]] * puntosExtra[obj.longitud][y] * ronda;
-            if (obj.longitud == 6) {
+            if (obj.longitud === 6) {
                 valor *= 2;
-            } else if (obj.longitud == 7) {
+            } else if (obj.longitud === 7) {
                 valor *= 3;
             }
             total += valor;
@@ -164,11 +172,11 @@ function fPalabrasEncontradas() {
     vPalabrasEncontradas.sort(function (a, b) {
         if (a.puntos < b.puntos) {
             return 1;
-        }
-        if (a.puntos > b.puntos) {
+        } else if (a.puntos > b.puntos) {
             return -1;
+        } else {
+            return 0;
         }
-        return 0;
     });
 
     vPalabrasEncontradas.forEach(function (palabra) {
@@ -189,7 +197,7 @@ function fPalabrasEncontradas() {
         let tr = document.createElement("tr");
         for (let x = 3; x < 8; x++) {
             let td = document.createElement("td");
-            if (palabrasEncontradas[x][y]) {
+            if (Array.isArray(palabrasEncontradas[x]) && palabrasEncontradas[x][y]) {
                 td.className = 'palenc noselect';
                 let txt = document.createTextNode(palabrasEncontradas[x][y] + ' - ' + puntosEncontrados[x][y]);
                 td.appendChild(txt);
@@ -206,9 +214,9 @@ function fPuntosExtra(form) {
     for (let x = 3; x < 8; x++) {
         puntosExtra[x] = new Array();
         for (let y = 0; y < x; y++) {
-            if (form[contador].value == 'DL') {
+            if (form[contador].value === 'DL') {
                 valor = 2;
-            } else if (form[contador].value == 'TL') {
+            } else if (form[contador].value === 'TL') {
                 valor = 3;
             } else {
                 valor = 1;

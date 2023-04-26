@@ -1,13 +1,30 @@
 @media (prefers-color-scheme: dark) {
-    body { background-color: var(--bs-body-color); color: var(--bs-light); }
-    nav { background-color: var(--bs-gray-dark) !important; color: var(--bs-light);}
-    table { color: var(--bs-light) !important; }
-    .form-control, .form-control:focus { background-color: var(--bs-gray-dark); color: var(--bs-light); }
-    .table-striped>tbody>tr:nth-of-type(odd)>* { color: var(--bs-gray-200)}
-    .table-hover>tbody>tr:hover>* { color: var(--bs-light)}
+    body {
+        background-color: var(--bs-body-color);
+        color: var(--bs-light);
+    }
+    nav {
+        background-color: var(--bs-gray-dark) !important;
+        color: var(--bs-light);
+    }
+    table {
+        color: var(--bs-light) !important;
+    }
+    .form-control, .form-control:focus {
+        background-color: var(--bs-gray-dark);
+        color: var(--bs-light);
+    }
+    .table-striped>tbody>tr:nth-of-type(odd)>* {
+        color: var(--bs-gray-200)
+    }
+    .table-hover>tbody>tr:hover>* {
+        color: var(--bs-light)
+    }
 }
 @media (prefers-color-scheme: light) {
-    nav { background-color: var(--bs-primary); }
+    nav {
+        background-color: var(--bs-primary);
+    }
 }
 div#idPuntosExtra input.btn-secondary {
     min-width: 2rem;
