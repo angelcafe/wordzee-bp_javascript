@@ -1,10 +1,9 @@
-var puntosExtra = new Array();
-var letrasDisponibles = new Array();
-var ronda;
-var vPalabras = new Array();
-var palabrasSugeridas = new Array();
-var puntos = new Array();
-puntos = { A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, L: 1, M: 3, N: 1, Ñ: 8, O: 1, P: 3, Q: 5, R: 1, S: 1, T: 1, U: 1, V: 4, X: 8, Y: 4, Z: 10 };
+let puntosExtra = new Array();
+let letrasDisponibles = new Array();
+let ronda;
+let vPalabras = new Object();
+let palabrasSugeridas = new Array();
+const puntos = { A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, L: 1, M: 3, N: 1, Ñ: 8, O: 1, P: 3, Q: 5, R: 1, S: 1, T: 1, U: 1, V: 4, X: 8, Y: 4, Z: 10 };
 
 (function () {
     'use strict';
@@ -12,18 +11,18 @@ puntos = { A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, L: 1, M: 
     if (!window.localStorage)
         window.alert("Su navegador es incompatilbe con esta aplicación. Utilice un navegador éstandar.");
     if ('serviceWorker' in navigator)
-        navigator.serviceWorker.register('./sw.js');
-    cargarPalabras();
+        // navigator.serviceWorker.register('./sw.js');
+        cargarPalabras();
     inicio();
 })();
 
 function ajax() {
-    let reqHeader = new Headers();
+    const reqHeader = new Headers();
     reqHeader.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    let initObject = {
+    const initObject = {
         method: 'POST', headers: reqHeader, body: 'cargar=todo', cache: 'no-cache'
     };
-    var userRequest = new Request('https://angelcastro.com.es/wordzee/back/buscapalabras.php', initObject);
+    const userRequest = new Request('back/buscapalabras.php', initObject);
     fetch(userRequest)
         .then(response => {
             if (response.status === 200) {
@@ -41,18 +40,19 @@ function ajax() {
 }
 
 function alerta(message, type) {
-    var alertPlaceholder = document.getElementById('liveAlertPlaceholder');
-    var wrapper = document.createElement('div');
+    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+    const wrapper = document.createElement('div');
     wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
     alertPlaceholder.append(wrapper);
 }
 
 function buscarPalabras() {
     if (Array.from(document.querySelectorAll('input[required]')).every(e => e.value != '')) {
-        var form = document.forms[0];
+        const form = document.forms[0];
         fPuntosExtra(form);
         fLetrasDisponibles(form);
         fRonda(form);
+        fPalabrasValor();
         fPalabrasEncontradas();
         document.querySelectorAll("td.palenc").forEach(e => e.addEventListener("click", copiarEncontradaDisponibles));
         if (document.querySelector('.alert')) {
@@ -101,7 +101,7 @@ function cargarPalabras(datos = null) {
 }
 
 function copiarEncontradaDisponibles(e) {
-    let palabra = e.target.innerText.split(' ')[0];
+    const palabra = e.target.innerText.split(' ')[0];
     if (palabra.length > 0) {
         document.querySelectorAll('#letras input').forEach((e, i) => e.value = palabra[i] || '');
         document.getElementById('letras').scrollIntoView();
@@ -129,7 +129,7 @@ function fLetrasDisponibles(form) {
 }
 
 function fLetrasInput(e, element) {
-    var texto = /^[a-jl-vx-zA-JL-VX-ZñÑ]$/;
+    const texto = /^[a-jl-vx-zA-JL-VX-ZñÑ]$/;
     if (texto.test(element.value) === true) {
         if (e.currentTarget.nextElementSibling) {
             e.currentTarget.nextElementSibling.focus();
@@ -148,15 +148,62 @@ function palabrasCargadas(dat) {
 
 function fPalabrasEncontradas() {
     const cadenaLetrasDisponibles = letrasDisponibles.join('');
+    let vPalabrasEncontradas = vPalabras.filter(function (obj) {
+        let letrasPalabra = obj.nombre.split('');
+        for (let y = 0; y < letrasPalabra.length; y++) {
+            if (letrasDisponibles.includes(letrasPalabra[y]) === false ||
+                (obj.nombre.split(letrasPalabra[y]).length > cadenaLetrasDisponibles.split(letrasPalabra[y]).length)) {
+                return false;
+            }
+        }
+        return true;
+    });
+
+    fPalabrasMostrar(vPalabrasEncontradas, 'idPalabrasEncontradas', 'palenc noselect');
+}
+
+function fPalabrasMostrar(palabras, id, clase) {
     let palabrasEncontradas = new Array();
     let puntosEncontrados = new Array();
-    let vPalabrasEncontradas = vPalabras.filter(function (obj) {
+
+    palabras.forEach(function (palabra) {
+        try {
+            palabrasEncontradas[palabra.longitud].push(palabra.nombre);
+            puntosEncontrados[palabra.longitud].push(palabra.puntos);
+        } catch (error) {
+            palabrasEncontradas[palabra.longitud] = new Array();
+            puntosEncontrados[palabra.longitud] = new Array();
+            palabrasEncontradas[palabra.longitud].push(palabra.nombre);
+            puntosEncontrados[palabra.longitud].push(palabra.puntos);
+        }
+    });
+
+    const destino = document.getElementById(id);
+    while (destino.firstChild) {
+        destino.removeChild(destino.firstChild);
+    }
+
+    let txt;
+    for (let y = 0; y < 10; y++) {
+        let tr = document.createElement("tr");
+        for (let x = 3; x < 8; x++) {
+            let td = document.createElement("td");
+            if (Array.isArray(palabrasEncontradas[x]) && palabrasEncontradas[x][y]) {
+                td.className = clase;
+                txt = document.createTextNode(palabrasEncontradas[x][y] + ' - ' + puntosEncontrados[x][y]);
+                td.appendChild(txt);
+            }
+            tr.appendChild(td);
+        }
+        destino.appendChild(tr);
+    }
+}
+
+function fPalabrasValor() {
+    vPalabras.map(function (obj) {
         let letrasPalabra = obj.nombre.split('');
         let total = 0;
         for (let y = 0; y < letrasPalabra.length; y++) {
-            if (letrasDisponibles.includes(letrasPalabra[y]) === false || (obj.nombre.split(letrasPalabra[y]).length > cadenaLetrasDisponibles.split(letrasPalabra[y]).length)) {
-                return false;
-            }
             let valor = puntos[letrasPalabra[y]] * puntosExtra[obj.longitud][y] * ronda;
             if (obj.longitud === 6) {
                 valor *= 2;
@@ -166,10 +213,8 @@ function fPalabrasEncontradas() {
             total += valor;
         }
         obj.puntos = total;
-        return true;
     });
-
-    vPalabrasEncontradas.sort(function (a, b) {
+    const palabras_ordenadas = newObject(vPalabras).sort(function (a, b) {
         if (a.puntos < b.puntos) {
             return 1;
         } else if (a.puntos > b.puntos) {
@@ -179,33 +224,9 @@ function fPalabrasEncontradas() {
         }
     });
 
-    vPalabrasEncontradas.forEach(function (palabra) {
-        if (!Array.isArray(palabrasEncontradas[palabra.longitud]) || !Array.isArray(puntosEncontrados[palabra.longitud])) {
-            palabrasEncontradas[palabra.longitud] = new Array();
-            puntosEncontrados[palabra.longitud] = new Array();
-        }
-        palabrasEncontradas[palabra.longitud].push(palabra.nombre);
-        puntosEncontrados[palabra.longitud].push(palabra.puntos);
-    });
+    vPalabras = palabras_ordenadas;
 
-    const destino = document.getElementById("idPalabrasEncontradas");
-    while (destino.firstChild) {
-        destino.removeChild(destino.firstChild);
-    }
-
-    for (let y = 0; y < 10; y++) {
-        let tr = document.createElement("tr");
-        for (let x = 3; x < 8; x++) {
-            let td = document.createElement("td");
-            if (Array.isArray(palabrasEncontradas[x]) && palabrasEncontradas[x][y]) {
-                td.className = 'palenc noselect';
-                let txt = document.createTextNode(palabrasEncontradas[x][y] + ' - ' + puntosEncontrados[x][y]);
-                td.appendChild(txt);
-            }
-            tr.appendChild(td);
-        }
-        destino.appendChild(tr);
-    }
+    fPalabrasMostrar(vPalabras, 'idPalabrasGanadoras', 'noselect');
 }
 
 function fPuntosExtra(form) {
@@ -240,4 +261,9 @@ function fRonda(form) {
         }
         contador++;
     }
+}
+
+function newObject(obj) {
+    let newObj = JSON.stringify(obj);
+    return JSON.parse(newObj);
 }
