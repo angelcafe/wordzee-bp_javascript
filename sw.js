@@ -13,7 +13,7 @@ const filesToCache = [
     './js/bootstrap.bundle.min.js',
     './js/index.js'
 ];
-const version = '0.3.3';
+const version = '0.3.4';
 /* Start the service worker and cache all of the app's content */
 self.addEventListener('install', function (e) {
     e.waitUntil(

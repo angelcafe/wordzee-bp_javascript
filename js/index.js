@@ -7,43 +7,23 @@ const puntos = { A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, L: 
 (function () {
     'use strict';
 
-    if (!window.localStorage)
+    if (!window.localStorage) {
         window.alert("Su navegador es incompatible con esta aplicación. Utilice un navegador estándar.");
-    if ('serviceWorker' in navigator)
+    }
+    if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js');
-        cargarPalabras();
-    inicio();
+    }
+    cargarPalabras();
+    document.getElementsByName("pal6let6")[0].value = "DP";
+    document.getElementsByName("pal6let6")[0].className = 'btn btn-secondary bg-primary';
+    document.getElementsByName("pal7let7")[0].value = "TP";
+    document.getElementsByName("pal7let7")[0].className = 'btn btn-secondary bg-warning';
+    document.querySelectorAll('#idPuntosExtra input').forEach(element => element.addEventListener("click", cambiarValorBotones));
+    document.querySelectorAll("#letras > input").forEach(element => {
+        element.addEventListener("keyup", e => fLetrasInput(e, element));
+        element.addEventListener("click", e => e.currentTarget.select());
+    });
 })();
-
-function ajax() {
-    const reqHeader = new Headers();
-    reqHeader.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    const initObject = {
-        method: 'POST', headers: reqHeader, body: 'cargar=todo', cache: 'no-cache'
-    };
-    const userRequest = new Request('back/buscapalabras.php', initObject);
-    fetch(userRequest)
-        .then(response => {
-            if (response.status === 200) {
-                return response.json();
-            } else {
-                throw "Respuesta incorrecta del servidor";
-            }
-        })
-        .then(function (data) {
-            cargarPalabras(JSON.stringify(data));
-        })
-        .catch(function (err) {
-            console.log(err);
-        });
-}
-
-function alerta(message, type) {
-    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-    alertPlaceholder.append(wrapper);
-}
 
 function buscarPalabras() {
     if (Array.from(document.querySelectorAll('input[required]')).every(e => e.value != '')) {
@@ -60,7 +40,10 @@ function buscarPalabras() {
         }
     } else {
         if (!document.querySelector('.alert')) {
-            alerta('Hay que rellenar todas las Letras disponibles', 'danger');
+            const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = '<div class="alert alert-danger alert-dismissible" role="alert">Hay que rellenar todas las Letras disponibles<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+            alertPlaceholder.append(wrapper);
         }
     }
 }
@@ -92,31 +75,48 @@ function cargarPalabras(datos = null) {
     } else {
         datos = localStorage.getItem('palabras');
         if (!datos) {
-            ajax();
+            const reqHeader = new Headers();
+            reqHeader.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            const initObject = {
+                method: 'POST', headers: reqHeader, body: 'cargar=todo', cache: 'no-cache'
+            };
+            const userRequest = new Request('back/buscapalabras.php', initObject);
+            fetch(userRequest)
+                .then(response => {
+                    if (response.status === 200) {
+                        return response.json();
+                    } else {
+                        throw "Respuesta incorrecta del servidor";
+                    }
+                })
+                .then(function (data) {
+                    cargarPalabras(JSON.stringify(data));
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
             return;
         }
     }
-    palabrasCargadas(JSON.parse(datos));
+    datos = JSON.parse(datos);
+    vPalabras = datos.map(function (palabra) {
+        return { nombre: palabra, longitud: palabra.length };
+    });
 }
 
 function copiarEncontradaDisponibles(e) {
     const palabra = e.target.innerText.split(' ')[0];
     if (palabra.length > 0) {
-        document.querySelectorAll('#letras input').forEach((e, i) => e.value = palabra[i] || '');
+        const letras_input = document.querySelectorAll('#letras input');
+        letras_input.forEach((e, i) => e.value = palabra[i] || '');
+        for (let x=0; x<letras_input.length; x++) {
+            if (letras_input[x].value == '') {
+                letras_input[x].focus();
+                break;
+            }
+        }
         document.getElementById('letras').scrollIntoView();
     }
-}
-
-function inicio() {
-    document.getElementsByName("pal6let6")[0].value = "DP";
-    document.getElementsByName("pal6let6")[0].className = 'btn btn-secondary bg-primary';
-    document.getElementsByName("pal7let7")[0].value = "TP";
-    document.getElementsByName("pal7let7")[0].className = 'btn btn-secondary bg-danger';
-    document.querySelectorAll('#idPuntosExtra input').forEach(element => element.addEventListener("click", cambiarValorBotones));
-    document.querySelectorAll("#letras > input").forEach(element => {
-        element.addEventListener("keyup", e => fLetrasInput(e, element));
-        element.addEventListener("click", e => e.currentTarget.select());
-    });
 }
 
 function fLetrasDisponibles(form) {
@@ -137,12 +137,6 @@ function fLetrasInput(e, element) {
     } else {
         e.currentTarget.value = '';
     }
-}
-
-function palabrasCargadas(dat) {
-    vPalabras = dat.map(function (palabra) {
-        return { nombre: palabra, longitud: palabra.length };
-    });
 }
 
 function fPalabrasEncontradas() {
@@ -182,14 +176,19 @@ function fPalabrasMostrar(palabras, id, clase) {
         destino.removeChild(destino.firstChild);
     }
 
-    let txt;
+    let primera_fila = document.querySelectorAll('#idPalabrasGanadoras > tr:nth-child(1) td');
     for (let y = 0; y < 10; y++) {
         let tr = document.createElement("tr");
         for (let x = 3; x < 8; x++) {
             let td = document.createElement("td");
             if (Array.isArray(palabrasEncontradas[x]) && palabrasEncontradas[x][y]) {
                 td.className = clase;
-                txt = document.createTextNode(palabrasEncontradas[x][y] + ' - ' + puntosEncontrados[x][y]);
+                let diff = (primera_fila.length > 0) ? (parseInt(primera_fila[x-3].innerText.split(' - ')[1])) : ('');
+                if (diff) {
+                    diff = puntosEncontrados[x][y] * 100 / diff;
+                    diff = ` (${diff.toFixed(2)}%)`;
+                }
+                let txt = document.createTextNode(palabrasEncontradas[x][y] + ' - ' + puntosEncontrados[x][y] + diff);
                 td.appendChild(txt);
             }
             tr.appendChild(td);
@@ -246,6 +245,12 @@ function fPuntosExtra(form) {
 }
 
 function restablecer() {
+    localStorage.removeItem('palabras');
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+            registration.unregister();
+        }
+    });
     window.location.href = window.location.href;
 }
 
