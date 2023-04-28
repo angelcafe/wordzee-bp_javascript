@@ -1,15 +1,14 @@
-let puntosExtra = new Array();
-let letrasDisponibles = new Array();
+let puntosExtra = [];
+let letrasDisponibles = [];
 let ronda;
-let vPalabras = new Object();
-let palabrasSugeridas = new Array();
+let vPalabras = {};
 const puntos = { A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, L: 1, M: 3, N: 1, Ñ: 8, O: 1, P: 3, Q: 5, R: 1, S: 1, T: 1, U: 1, V: 4, X: 8, Y: 4, Z: 10 };
 
 (function () {
     'use strict';
 
     if (!window.localStorage)
-        window.alert("Su navegador es incompatilbe con esta aplicación. Utilice un navegador éstandar.");
+        window.alert("Su navegador es incompatible con esta aplicación. Utilice un navegador estándar.");
     if ('serviceWorker' in navigator)
         navigator.serviceWorker.register('./sw.js');
         cargarPalabras();
@@ -163,16 +162,16 @@ function fPalabrasEncontradas() {
 }
 
 function fPalabrasMostrar(palabras, id, clase) {
-    let palabrasEncontradas = new Array();
-    let puntosEncontrados = new Array();
+    let palabrasEncontradas = [];
+    let puntosEncontrados = [];
 
     palabras.forEach(function (palabra) {
         try {
             palabrasEncontradas[palabra.longitud].push(palabra.nombre);
             puntosEncontrados[palabra.longitud].push(palabra.puntos);
         } catch (error) {
-            palabrasEncontradas[palabra.longitud] = new Array();
-            puntosEncontrados[palabra.longitud] = new Array();
+            palabrasEncontradas[palabra.longitud] = [];
+            puntosEncontrados[palabra.longitud] = [];
             palabrasEncontradas[palabra.longitud].push(palabra.nombre);
             puntosEncontrados[palabra.longitud].push(palabra.puntos);
         }
@@ -214,7 +213,7 @@ function fPalabrasValor() {
         }
         obj.puntos = total;
     });
-    const palabras_ordenadas = newObject(vPalabras).sort(function (a, b) {
+    vPalabras = newObject(vPalabras).sort(function (a, b) {
         if (a.puntos < b.puntos) {
             return 1;
         } else if (a.puntos > b.puntos) {
@@ -224,8 +223,6 @@ function fPalabrasValor() {
         }
     });
 
-    vPalabras = palabras_ordenadas;
-
     fPalabrasMostrar(vPalabras, 'idPalabrasGanadoras', 'noselect');
 }
 
@@ -233,7 +230,7 @@ function fPuntosExtra(form) {
     let contador = 0;
     let valor;
     for (let x = 3; x < 8; x++) {
-        puntosExtra[x] = new Array();
+        puntosExtra[x] = [];
         for (let y = 0; y < x; y++) {
             if (form[contador].value === 'DL') {
                 valor = 2;
