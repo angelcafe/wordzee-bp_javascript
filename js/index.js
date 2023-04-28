@@ -1,5 +1,5 @@
-let puntosExtra = [];
-let letrasDisponibles = [];
+let puntos_extra = [];
+let letras_disponibles = [];
 let ronda;
 let vPalabras = {};
 const puntos = { A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, L: 1, M: 3, N: 1, Ñ: 8, O: 1, P: 3, Q: 5, R: 1, S: 1, T: 1, U: 1, V: 4, X: 8, Y: 4, Z: 10 };
@@ -122,7 +122,7 @@ function inicio() {
 function fLetrasDisponibles(form) {
     let contador = 25;
     for (let x = 0; x < 7; x++) {
-        letrasDisponibles[x] = form[contador].value.toUpperCase();
+        letras_disponibles[x] = form[contador].value.toUpperCase();
         contador++;
     }
 }
@@ -146,11 +146,11 @@ function palabrasCargadas(dat) {
 }
 
 function fPalabrasEncontradas() {
-    const cadenaLetrasDisponibles = letrasDisponibles.join('');
+    const cadenaLetrasDisponibles = letras_disponibles.join('');
     let vPalabrasEncontradas = vPalabras.filter(function (obj) {
         let letrasPalabra = obj.nombre.split('');
         for (let y = 0; y < letrasPalabra.length; y++) {
-            if (letrasDisponibles.includes(letrasPalabra[y]) === false ||
+            if (letras_disponibles.includes(letrasPalabra[y]) === false ||
                 (obj.nombre.split(letrasPalabra[y]).length > cadenaLetrasDisponibles.split(letrasPalabra[y]).length)) {
                 return false;
             }
@@ -203,7 +203,7 @@ function fPalabrasValor() {
         let letrasPalabra = obj.nombre.split('');
         let total = 0;
         for (let y = 0; y < letrasPalabra.length; y++) {
-            let valor = puntos[letrasPalabra[y]] * puntosExtra[obj.longitud][y] * ronda;
+            let valor = puntos[letrasPalabra[y]] * puntos_extra[obj.longitud][y] * ronda;
             if (obj.longitud === 6) {
                 valor *= 2;
             } else if (obj.longitud === 7) {
@@ -230,7 +230,7 @@ function fPuntosExtra(form) {
     let contador = 0;
     let valor;
     for (let x = 3; x < 8; x++) {
-        puntosExtra[x] = [];
+        puntos_extra[x] = [];
         for (let y = 0; y < x; y++) {
             if (form[contador].value === 'DL') {
                 valor = 2;
@@ -239,7 +239,7 @@ function fPuntosExtra(form) {
             } else {
                 valor = 1;
             }
-            puntosExtra[x][y] = valor;
+            puntos_extra[x][y] = valor;
             contador++;
         }
     }
